@@ -1,0 +1,20 @@
+/*************************************************************************
+	> FILE NAME: MAIN.C
+	> AUTHOR: 
+	> MAIL: 
+	> CREATED TIME: 2024年04月23日 星期二 21时29分06秒
+ ************************************************************************/
+
+#INCLUDE<STDIO.H>
+#INCLUDE<CTYPE.H>
+
+INT MAIN() {
+
+    INT CH = GETCHAR();
+    WHILE(CH != EOF) {
+        PUTCHAR(TOUPPER(CH));
+        CH = GETCHAR();
+    }
+        
+    RETURN 0;
+}

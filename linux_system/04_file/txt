@@ -1,0 +1,51 @@
+PEN_SOURCE >= 500
+SIX_C_SOURCE >= 200112L
+SIX_C_SOURCE >= 200809L
+tnclut_macros(7)):e <sys/tat():ypes.h>nclude <sys/stat.h>nclude <unistd.h>YNOPSInt stat(cebc 2.10:nst char *pathname, struct stat *statbuf);nt fstat(int fd, struct stat *statbuf);nt lstat(const char *pathname, struct stat *statbuf);nclude <fcntl.h>           /* Definition of AT_* constants */nclude <sys/stat.h>nt fstatat(int dirfd, const char *pathnameture   Test   Macro   Requirements   for   glibc   (see  fea‐), steuct stat *statbuf,)nt flags);STFILE_SOURCEMETOOLONG
+te: the order rthname is too long.ofome  fields on various architectures.  Consult thefieldsbc and kernel source code if you need  to  know  the  de‐ in the sls.tat structure varies some‐
+CRIPTION
+TES
+lder kernels and older standards did not support nanosecond
+ ttamp tamp  fields.   Instead,  there  were  three  timestampields acrosst_atime, st_mtime, and st_ctime—typed as time_t that archidectures   In  adtamps with one-second precision.ition,  the definitionthe folbove does not show the padding bytes that  may  be  presentlowing fields:nce glibc 2.10
+nPopupPost()
+    ince  kernel 2.5.48, the stat structure supports nanosecond
+      olution  for  the  three  file  timestamp  fields.    The   trung symbolic link.ct st_mode;        /* File type and mode */t_dev;         /* ID of device containing file */ return informno_t     st_ino;         /* Inode number */ation about a , in the buf 
+          te:  for  performance  and  simplicity  reasons, different
+          ENT pathname0e is an empty string and AT_EMPTY_PATH was not
+id_t     st_upecified in flags.d;n the stat structure may contain  state  information         /* User ID of owner */d_t     st_gid;         /* Group ID oft_ctime st_ctim.tv_secowner */nce glibc 2.10
+m  different  moments  during the execution of the system
+MEM Out of memory (i.e., kernel memory).
+TDIR
+t_rdev;        /* Device ID (if special file) */statbuf.  No permissions are  requiredt_blocks;      /* Number  512B blocks allocated */t_atime st_atim.tv_sec      /* Backward compatibility */otself, —int_mtime st_mtim.tv_secthe case of stat(), fstatat(), andtat()—execute (search) permission is required  on  all  o in pathname that lead to the filetat()  and  fstatat()  retrieve  information about the file. component of the path prefix of pathname is  not  a
+m  different  momentry.on of the system
+VERFLOW
+i  mple, if sts  during the executi_mod, or st_uid is changed  by  an‐for the foll wing  before Linux 2.6, see NOTES. ieldstruct timespec st_atim;  /* Time of last access *truct timespec st_mtim;  /* Time of last modification *truct timespec st_ctim;  /* Time of last status change */
+r number of blocks cannot be represented in,
+ is set appropectively,  the  types  off_t, ino_t, or blkcnt_t.riately.
+ths error can occur when, for example,  an  applica‐er  process by calling chmod(2RORS chown(2), stat() mighnCCES Search  permission  is denied for one of the directo‐
+        
+        FFSET_BITS=64 calls stat() on a  file  whose
+ld st_mode toize exceeds (1<<31)-1 bytes.ethe in the  path  prefix  of  pathname.   (See  also) with the newrth_resolution(7).) st_uid, or  the
+n success, zero is returned.  On error, -1 is returned, ad address.nd
+wing additional errors can occur for fstatat():
+OP  Too  many symbolic links encountered while traversing
+    TDIR
+    SIONSs added to Linux in kernel 2.6.16; library  sup‐
+NVAL Invalid fithname  is  relative and dirfd is a file descriptorlag specifiedein flags.ng to a file other than a directory.re openar(2) for an explanation of the rth.need for fstatat()ETURN VALUEDF  dirfd is not a valid file descriptor.
+nPopupPost()
+    SIX.1.2008.
+           port waentroduced in  BSD.   The  interpretation added to glibc in vsrsion 2.4ONFORMING Ttat(),   fstat(),   lstat():  SVr4,  4.3BSD,  POSIX.1-2001O,ccording to POSIX.1-2001, lstat() on a symbolic  link  neemtion only in the st_size field and theO
+                                                                                          tnosecond  components  of  each timestamp are available via       mes of the form st_atim.tv_nsec, if suitable feature  test                               SIX.1-2008  tightensre involved.)  the specification, requiring lstat()
+                                                                                                                                             s are defined.  Nanosecond timestamps were standardized
+      nternal versions of  the  stat  structure  dealtn POSIX.1th by the different versions are, respectively:-2008, and, starting with version 2.12, glibc  ex‐       e                                                                                                                   f  the  st_me  of the st_blocks and st_blksize fields may be less por‐de  field  of  the  stae  of the st_blocks and st_blksize fields may be less por‐  structureO.
+                                                                                                                                                        nux 2.4.  Similar remarks apply for fstat() and lstat().vlbeit  with  differenn  names); the last was added iner time, increases in the size of the stat structure  have
+                                                                                                                                                        ld_kernel_stat
+                                                                                                                                                         _oldstat),   sys_newstat()   (slot    __NR_stat),    andt)aforys_stat64()  (slot __NR_stat64) on 32-bit platforms such asmentio386.  The first two versions were already present in  Linuxned  m386.  The first two versions were already present in  Linuxacros  are  defined,ses  the  nanosecond component names if _POSIX_C_SOURCEth the vnosecond  values  are exposed with names of thealue 200809L mt_atimensec. g library/kernel differences
+                                                                                                                                                         riginal  structure,  with rather narrow fields,nd no paddingtat   Larger st_ino field  and  padding  added  to  various.rts of the structure to allow for future expansiontat64 Even  larger  st_ino  field, larger st_uid and st_gidccommodate the Linux-2.4 expansion of UIDsnd  GIDs  to  32  bits,  and  various other enlargednd further padding in the structure.   (Vari‐)
+    us  padding  bytes were eventually consumed in Linux
+    us  padding  bytes were eventually consumed in Linux
+    us  padding  bytes were eventually consumed in Linuth  the  advent  of  32-bit  device  IDs ystem call employed by the  glibc  fstatat()
+    nPopupPostall 
+on is actually called fstatat64() or, on someit s0ysrchitectures, newfstatat().tems, life is simpler: there is a single
+     ntat()  system  call and the kernel deals with a stat struc‐noseconn componens fnd repacking the reeurned in‐or the timestamp bc  stat() wrapper functimtion if required for old binaries.n hides these details fromfields.pplications, invoking the most recent version of the system)MPLES
+     wing program calls lstat()  and  displays  selected

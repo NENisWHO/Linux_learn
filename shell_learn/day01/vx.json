@@ -1,0 +1,29 @@
+{
+    "created_time": "2024-04-24T01:30:39Z",
+    "files": [
+    ],
+    "folders": [
+        {
+            "name": "01_test"
+        },
+        {
+            "name": "02_var"
+        },
+        {
+            "name": "03_globbing"
+        },
+        {
+            "name": "05_cond_test"
+        },
+        {
+            "name": "04_cmd_replace"
+        },
+        {
+            "name": "08_pos_arg"
+        }
+    ],
+    "id": "7",
+    "modified_time": "2024-04-24T01:30:39Z",
+    "signature": "27206036775103",
+    "version": 3
+}
