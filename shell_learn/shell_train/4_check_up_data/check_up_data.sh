@@ -46,6 +46,7 @@ find /path ! -group root -exec chgrp learn {} \;
 如果文件量很大，执行效率很差。
 
 ### 关键知识点总结：
+0）stat：参数-c，设置显示格式；
 1）查看文件权限：  stat -c %a 1.txt
 2）查看文件所有者：stat -c %U 1.txt
 3）查看文件所属组：stat -c %G 1.txt

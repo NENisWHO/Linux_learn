@@ -17,6 +17,9 @@
         },
         {
             "name": "5_mv_data"
+        },
+        {
+            "name": "6_MonitorLoad"
         }
     ],
     "id": "44",
