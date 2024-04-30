@@ -20,6 +20,15 @@
         },
         {
             "name": "6_MonitorLoad"
+        },
+        {
+            "name": "7_web"
+        },
+        {
+            "name": "8_cmdMeau"
+        },
+        {
+            "name": "9_printNum"
         }
     ],
     "id": "44",

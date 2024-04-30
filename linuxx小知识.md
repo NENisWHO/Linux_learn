@@ -197,10 +197,4 @@ echo "安装完成"
 参考链接：[宿船长的Notion](https://suyelu.notion.site/Vim-df538ebfd7744ef8ae5b6c27e3611522)
 ```
 
-## 6. Docker拉取的镜像
-```
-docker pull 的镜像存放在
-/var/lib/docker/image/ 
-目录下
-```
 

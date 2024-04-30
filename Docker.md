@@ -3,8 +3,7 @@
 ## 1. Docker拉取的镜像
 ```
 docker pull 的镜像存放在
-/var/lib/docker/image/ 
-目录下
+/var/lib/docker/image/ 目录下
 ```
 ## 2. Docker 的数据持久化
 ```
