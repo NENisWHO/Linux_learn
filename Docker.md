@@ -76,3 +76,74 @@ start：是拉起由stop而exited状态的容器 --> "拉起stop的容器"
 
 参考：[csdn](https://blog.csdn.net/weixin_43665662/article/details/117567941)
 ``` 
+
+## 6. 
+```
+failed to register layer: open /usr/lib/mysqlsh/lib/python3.9/site-packages/oci/email/models/sender.py: no space left on device
+```
+
+## 7. 查看docker仓库
+```
+配置仓库
+yum-config-manager \
+ --add-repo \
+ https://download.docker.com/linux/centos/docker-ce.repo
+ 
+cat /etc/yum.repos.d/docker-ce.repo 
+```
+
+## 8.关闭防火墙
+```
+- 查看防火墙状态命令
+    1）sudo systemctl status firewalld
+    2) firewall-cmd --state
+- 关闭防火墙命令
+    1）临时性关闭（重启后失效）：sudo systemctl stop firewalld
+    2) 永久性关闭（重启后生效）：sudo systemctl disable firewalld
+- 开启防火墙命令
+    1）临时性开启（重启后失效）：sudo systemctl start firewalld
+    2) 永久性开启（重启后生效）：sudo systemctl enable firewalld
+```
+
+## 9.Docker中curl localhost失败
+```
+前提条件：
+yum install nginx
+yum install curl
+
+失败提示：
+root@84efe30d0963:/# curl localhost
+curl: (7) Failed to connect to localhost port 80: Connection refused
+
+解决：
+/etc/init.d/nginx start
+
+```
+
+## 10.docker-compose 
+```
+1. 准备工作：
+    1）安装docker-compose
+    2）编辑wordpress的compose yaml文件  “将文件写在某个目录下比如：/data/docker”
+
+2. 启动：docker-compose up -d
+3. 查看：docker-compose ps “这个命令也要在上述目录/data/docker下执行才有结果”
+4. 停止：docker-compose stop
+```
+
+## 11. 基础课12节-harbor，解决nginx一直处于restart状态
+```
+1. 在 sh install.sh 之后，先查看通过docker-compose ps
+   查看容器，nginx一直处于restart状态
+2. 通过docker logs nginx的id ；查看nginx的日志文件。
+   找到问题是 “签证无法加载”
+   具体显示
+   2024/05/01 11:40:15 [emerg] 1#0: cannot load certificate "/etc/cert/server.crt": PEM_read_bio_X509_AUX() failed (SSL: error:0480006C:PEM routines::no start line:Expecting: TRUSTED CERTIFICATE)
+nginx: [emerg] cannot load certificate "/etc/cert/server.crt": PEM_read_bio_X509_AUX() failed (SSL: error:0480006C:PEM routines::no start line:Expecting: TRUSTED CERTIFICATE)
+
+    --》得出原因是因为老师给的签证可能过期了
+3. 解决方案舍掉签证，使容器仅共个人使用；
+   注释掉https及certificate和private_key
+
+4. 在本机（非虚拟机）设置hosts即可
+```
