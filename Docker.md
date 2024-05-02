@@ -147,3 +147,4 @@ nginx: [emerg] cannot load certificate "/etc/cert/server.crt": PEM_read_bio_X509
 
 4. 在本机（非虚拟机）设置hosts即可
 ```
+
