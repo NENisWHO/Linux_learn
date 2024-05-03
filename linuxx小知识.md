@@ -198,3 +198,18 @@ echo "安装完成"
 ```
 
 
+## 6. 查看文件的时间
+```
+1. stat filename
+    - Access 文件最近访问时间 <--> ATime
+    - Modify 文件内容最近修改时间 <--> MTime
+    - Change 文件属性最近修改时间 <--> CTime
+
+2. touch 参数 文件名
+    -a 修改ATime
+    -d 使用指定日期来修改
+    -r 把指定的文件日期更设成和参考文档或目录日期相同的时间
+    
+
+参考：[CSDN](https://blog.csdn.net/qq_31828515/article/details/62886112)
+```

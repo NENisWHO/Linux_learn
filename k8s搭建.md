@@ -183,6 +183,7 @@ kubelet：在集群中的每个节点上用来启动 Pod 和容器等。
 
 kubectl：用来与集群通信的命令行工具。
 ```
+
 ## 6. 节点也想执行kubectl get nodes 指令
 
 ```
@@ -197,4 +198,88 @@ ssh: Could not resolve hostname aminglinux02: Name or service not known
 lost connection
 
 解决：配置masert的/etc/hosts 文件，添加node节点的ip和主机名映射
+```
+
+## 7. 查看站点信息和由yaml文件创建pod
+
+```
+1. 查看站点
+kubectl get node 
+kubectl get pod --all-namespaces
+
+2. 创建站点
+    1）在root家目录下创建一个k8s目录
+    2）创建yaml文件
+    3）kubectl create namespace "yaml文件中的namespace"
+    4) kubectl apply -f testpod.yaml  #应用一下这个yaml
+       运行结果 "yaml中的kind"/"yaml文件中metadata的name" cerate
+    5）查看一下信息
+       kubectl get po -n "yaml文件中的namespace"
+       kubectl describe po "yaml文件中metadata的name" -n "yaml文件中的namespace"
+       
+3. 删掉pod
+   - kubectl delete -f ***.yaml
+   - 再重新来一边创建
+   - 或者 -- 强制杀掉
+        kubectl delete --force pod "yaml文件中metadata的name" -n "yaml文件中的        namespace"
+   
+
+!!！！！注意可能kubectl delete -f ***.yaml时提示error: the server doesn't have a resource type "***"。我是阴差阳错的先删掉镜像后再执行kubectl delete -f ***.yaml成功了。
+    - crictl ps -a --> 查看完整的pod信息，对比IMAGE ID
+    - crictl image --> 调出镜像信息，复制IMAGE ID
+    - critcl rmi "IMAGE ID"
+    - 在***.yaml所在文件路径下执行kubectl delete -f ***.yaml
+      --> 成功提示pod "podname" deleted
+      
+4. 查看在那个节点上调度
+   crictl images
+   
+5. 查看k8s日志
+   journalctl -u kubelet
+
+
+！！！！！在2.5节课中有个错误需要重新apply calico.yaml
+    也是要在calico.yaml文件所在目录下才可以
+    kubectl delete -f calico.yaml
+    kubectl apply -f calico.yaml
+
+```
+
+## 8. pod资源限制
+```
+1. 在docker中最小单元是容器；而k8s中的最小单元是pod，pod里面存放容器
+
+
+
+```
+
+## 9. kubernetes 如何彻底删除pod、deployment、service
+
+```
+1. 创建deployment，及删除deployment（deployment是pod的集合可以一次性创建好多个同一个namespace的pod）
+
+1）创建，例子：kubectl create deployment testdp --image=nginx:1.23.2 -n aming --replicas=7 
+--> 由镜像nginx:1.23.2；在命名空间aming下复制7个testdp-**-*名字的容器
+
+2）删除，
+    - 删除一个deployment：kubectl delete deployment DEPLOYMENT_NAME -n NAMESPACE_NAME （DEPLOYMENT_NAME即testdp）
+    - 删除所有deployment：kubectl delete deployment -all
+    
+3）deployment特性，它是来管理一堆pod的，就是如果管理的pod出现了问题，
+    第一种方法：    
+        可以使用crictl ps -a 查看所有的container；
+        再使用  crictl stop container_name 停掉；
+        再使用  crictl rm   container_name 删掉
+    第二种方法：
+        可以使用 kubectl delete --force pod pod_name -n pod_namespace 删掉一个；
+    ** deployment会重新创建一个pod **   
+    
+2. 删除pod
+    - 删除所有pod：kubectl delete pod --all
+    - 删除一个：kubectl delete pod POD_NAME -n NAMESPACE_NAME
+
+3. 删除service
+    因为pod都删除了，对应的service就没有用了
+    - kubectl delete svc SERVICE_NAME -n NAMESPACE_NAME
+
 ```
