@@ -1,4 +1,4 @@
-# k8s搭建
+# k8s_杂记
 
 ## 11. 搭建单机k8s
 ```
@@ -281,5 +281,53 @@ kubectl get pod --all-namespaces
 3. 删除service
     因为pod都删除了，对应的service就没有用了
     - kubectl delete svc SERVICE_NAME -n NAMESPACE_NAME
+```
+
+## 10. API资源对象Deployment
+
+1. pod（单个的）之上为Deployment（pod的集合），用Deployment的目的是为了负载均衡和高可用。
+2. Deployment可以定义同一时间创建多个pod
+3. 查看pod分配到哪个节点上
+    - kubectl get po -o wide
+    - kubectl get po --all-namespaces -o wide 
+    
+## 11. API资源对象Service
+
+1. Service的作用为对外访问提供一个入口；
+2. deployment（**labels**）必须有一个service绑定在一起（**selector**）对外提供服务；
+3.  端口：
+    - port--service的port；
+    - targetPort--deployment的port     
+4. 查看svc详情
+    - 查看一个详情：
+        - kubectl describe svc ".yaml里的svcname"
+    - 查看所有：
+        - kubectl get svc  
+5. 三种Service类型
+    - ClusterIP：该方式为默认类型，即，不定义type字段时（如上面service的示例），就是该类型。
+    - NodePort：如果想直接通过k8s节点（k8s宿主机IP）的IP直接访问到service对应的资源，可以使用NodePort，Nodeport对应的端口范围:30000-32767
+    - LoadBlancer：这种方式，需要配合公有云资源比如阿里云、亚马逊云来实现，这里需要一个公网IP作为入口，然后来负载均衡所有的Pod。
+    
+## 12. API资源对象DaemonSet
+
+1. 应用场景：有些场景需要在每一个node上运行Pod（比如，网络插件calico、监控、日志收集），Deployment无法做到，而Daemonset（简称ds）可以。Deamonset的目标是，在集群的每一个节点上运行且只运行一个Pod。
 
 ```
+1. 主节点有一个保护机制，不允许ds或者普通的pod在master上运行，保护主节点的资源。
+2. 解决这个保护机制：
+1）查：kubectl describe node k8s01 |grep -i 'taint'
+2）改：改.yaml
+在spec: 下添加一下内容，与containers对齐
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    effect: NoSchedule     
+```
+2. 创建ds
+    - kubectl apply -f dsname.yaml
+3. 查看ds
+    - kubectl get ds
+    - kubectl get po
+    - kubectl get po -o wide
+    - kubectl get po -o wide -w （**动态查看**）
+    - kubectl get po --all-namespaces
+    - kubectl describe ds
