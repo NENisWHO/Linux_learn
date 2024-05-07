@@ -5,6 +5,9 @@
     "folders": [
         {
             "name": "Bridging_network"
+        },
+        {
+            "name": "VMRAM"
         }
     ],
     "id": "86",
