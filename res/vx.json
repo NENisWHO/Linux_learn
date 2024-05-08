@@ -8,6 +8,9 @@
         },
         {
             "name": "VMRAM"
+        },
+        {
+            "name": "int_base"
         }
     ],
     "id": "86",
