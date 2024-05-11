@@ -168,6 +168,10 @@ sudo ipvsadm --clear
 获取节点信息：
 kubectl get node 
 kubectl get pod --all-namespaces
+kubectl get svc
+kubectl describe pod
+    
+    加参数：-n 是指定命名空间
 
 kubernetes
 kubelet-1.26.2 kubeadm-1.26.2 kubectl-1.26.2
