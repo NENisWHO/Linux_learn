@@ -385,3 +385,84 @@ gpgkey=            #仓库的签名文件路径
 * 格式：ln   /路径/源数据    /路径/快捷方式的名称    #硬链接
 * 硬链接优势：源数据消失，快捷方式仍然有效
 * 硬链接缺点：只能针对文件制作快捷方式，不支持支持跨分区
+
+## 15. 系统进度
+
+1. pstree
+
+```
+pstree查看进程(Processes Tree)    
+•常用命令选项
+    -p：列出对应进程的PID编号 
+    -a：显示完整的命令行   
+systemd(PID永远为1)：所有进程的父进程（上帝进程）
+[root@localhost ~]# pstree     #显示正在运行的所有进程
+[root@localhost ~]# pstree  -p lisi #显示lisi用户开启的进程
+bash(9609)───vim(9656)
+[root@localhost ~]# pstree  -a  lisi   
+bash
+  └─vim haha.txt
+[root@localhost ~]# pstree  -ap  lisi
+```
+2. ps
+
+```
+ps — Processes Snapshot
+    –格式：ps  [选项]...
+•常用命令选项
+    –aux：显示当前终端所有进程（a）、当前用户在所有终端下的进程（x）、以用户格式输出（u）
+    -elf：显示系统内所有进程（-e）、以长格式输出（-l）信息、包括最完整的进程信息（-f）
+
+•ps  aux 操作
+    –列出正在运行的所有进程，显示进程信息非常详细
+
+•ps  -elf 操作
+    –列出正在运行的所有进程，显示进程父进程信息
+    –PPID为父进程的PID
+```
+
+3. top
+
+```
+top 动态的查看工具
+    –格式：top  [-d  刷新秒数]  [-U  用户名]
+
+    [root@localhost ~]# top   -d   1
+    按大写P进行CPU排序
+    按大写M进行内存排序   
+```
+
+4. pgrep —— Process Grep
+
+```
+pgrep — Process Grep
+    –用途：pgrep  [选项]...  查询条件
+    •常用命令选项
+    -l：输出进程名，而不仅仅是 PID
+    -u：检索指定用户的进程
+    -x：精确匹配完整的进程名 
+```
+
+5. 干掉进程
+
+```
+–Ctrl+c 组合键，中断当前命令程序
+–kill  [-9]  PID... 、kill  [-9]  %后台任务编号
+–killall  [-9]  进程名...
+-pkill    [-9]  查找条件   #包含就算
+```
+
+6. 控制进程
+
+```
+进程的前后台调度                         
+•&符号：正在运行的状态放入后台
+•Ctrl + z 组合键
+    –挂起当前进程（暂停并转入后台）
+•jobs 命令
+    –查看后台任务列表
+•fg 命令
+    –将后台任务恢复到前台运行
+•bg 命令
+    –激活后台被挂起的任务
+```
