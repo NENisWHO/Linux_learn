@@ -466,3 +466,60 @@ pgrep — Process Grep
 •bg 命令
     –激活后台被挂起的任务
 ```
+
+## 16. 登录用户查看
+
+* users、who、w 命令
+    * 查看已登录的用户信息，详细度不同
+* last、lastb 命令
+    * 查看最近登录成功/失败的用户信息
+    
+## 17. Linux内核定义的事件紧急程度
+
+* 分为 0~7 共8种优先级别
+* 其数值越小，表示对应事件越紧急/重要
+
+|                       |                              |
+| :-------------------: | :--------------------------: |
+|  0  EMERG（紧急）     |    会导致主机系统不可用的情况  |
+|   1  ALERT（警告）    |     必须马上采取措施解决的问题 |
+| 2  CRIT（严重）       |         比较严重的情况        |
+|    3  ERR（错误）     |           运行出现错误        |
+|  4  WARNING（提醒）   |     可能会影响系统功能的事件   |
+|  5  NOTICE（注意）    |      不会影响系统但值得注意    |
+|  6  INFO（信息）      |             一般信息          |
+|   7  DEBUG（调试）    |       程序或系统调试信息等     |
+
+## 18. 破解root密码
+
+>**前提：必须是服务器的管理者，涉及重启服务器**
+
+1. **重启系统,进入 救援模式**
+    * [root@A ~]# reboot 
+    * 开启虚拟机A，在此界面按**e键**
+    ![](F:/MarkDownsave/VNote_Linux/res/oneStopLearn/centos登录.png)
+    * 在linux16该行，将此行的**ro修改为rw** ，然后空格输入  **rd.break**
+    ![](F:/MarkDownsave/VNote_Linux/res/oneStopLearn/root密码.png)
+    
+    * 按 **ctrl    x **启动，会看到**switch_root:/#** 
+    
+2. 切换到硬盘操作系统环境
+    * **chroot    /sysroot**   #切换环境，切换到硬盘操作系统的环境
+    
+3. **重新设置root的密码**
+```
+sh-4.2# echo   1    |    passwd   --stdin    root
+```
+4. 如果**SELinux是强制模式**，**才需要SELinux失忆**，其他模式不需要让SELinux进行失忆
+
+```
+sh-4.2# touch   /.autorelabel    #让SELinux失忆
+或者可以修改SELinux运行模式，修改成宽松模式即可
+sh-4.2# vim   /etc/selinux/config #查看SELinux开机的运行模式
+```
+
+5. **强制重启系统完成修复**
+
+```
+sh-4.2# reboot   -f     #-f强制重启系统
+```
