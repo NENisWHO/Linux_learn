@@ -523,3 +523,19 @@ sh-4.2# vim   /etc/selinux/config #查看SELinux开机的运行模式
 ```
 sh-4.2# reboot   -f     #-f强制重启系统
 ```
+
+## 19. 将CentOS7.9终端改成英文
+```
+
+1、先备份语言配置文件
+    cp /etc/locale.conf /home/        locale.conf.backup
+
+2、打开配置文件
+    vim /etc/locale.conf
+
+3、把“zh_CN.UTF-8”修改为“en_US.UTF-8”  
+
+4、esc :wq 保存并退出
+
+5、shutdown -r now 重启
+```

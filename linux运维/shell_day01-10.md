@@ -585,3 +585,75 @@ fi
     -q 默认静态执行（不打印在终端，来判断真假）
 COMMENT
 ```
+
+## 11. 系统巡检
+
+```shell
+#!/bin/bash
+# auther: oldboy
+# desc:   System inspection script
+# version: v1
+
+#1. basis information
+hostname=`hostname`
+ip=`hostname -I`
+echo "   "
+echo "basic information"
+echo "  hostname: $hostname"
+echo "  ip adderss: $ip"
+echo "  "
+
+#2. Payload information
+load1=`uptime |awk -F'[ ,]+' '{print $(NF-2)}'`
+load5=`uptime |awk -F'[ ,]+' '{print $(NF-1)}'`
+load15=`uptime |awk -F'[ ,]+' '{print $(NF)}'`
+echo "  "
+echo "Last 1 minute: $load1"
+echo "Last 5 minute: $load5"
+echo "Last 15 minute: $load15"
+echo "  "
+
+#3. Memory information (in kb)
+mem_total=`free |awk 'NR==2{print $2}'`
+mem_used=`free |awk 'NR==2{print $3+$6}'`
+mem_used_percent=`free |awk 'NR==2{print ($3+$6)/$2*100"%"}'`
+echo "  "
+echo "Total memory: $mem_total"
+echo "How much memory is used: $mem_used"
+echo "Memory Usage: $mem_used_percent"
+echo "  "
+
+#4. swap
+swap_total=`free |awk 'NR==3{print $2}'`
+swap_used=`free |awk 'NR==3{print $3}'`
+swap_used_percent=`free |awk 'NR==3 && $2 != 0 {print $3/$2*100"%"} NR==3 && $2 ==0 {print "no swap"}'`
+echo "  "
+echo "total swap: $swap_total"
+echo "swap usage size: $swap_used"
+echo "swap usage: $swap_used_percent"
+echo "  "
+
+#5. Disk information
+disk_total=`fdisk -l |grep '/dev/[sv]d[a-z][:：]' |wc -l`
+root_size=`df -h |awk '$NF=="/"{print $2}'`
+root_used_percent=`df -h| awk '$NF=="/"{print $5}'`
+echo "  "
+echo "Several hard drives: $disk_total"
+echo "Root partition size: $root_size"
+echo "Root partition utilization: $root_used_percent"
+echo "  "
+
+
+#6. Process information
+proc_total=`top -bn1 |awk 'NR==2{print $2}'`
+proc_running=`top -bn1 |awk 'NR==2{print $4}'`
+proc_stopped=`top -bn1 |awk 'NR==2{print $8}'`
+proc_zombie=`top -bn1 |awk 'NR==2{print $10}'`
+echo "  "
+echo "Total number of processes: $proc_total"
+echo "Running process: $proc_running"
+echo "Number of Suspended Processes: $proc_stopped"
+echo "Number of zombie processes: $proc_zombie"
+
+
+```

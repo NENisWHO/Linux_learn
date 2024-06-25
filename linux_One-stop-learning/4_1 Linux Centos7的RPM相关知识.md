@@ -115,4 +115,36 @@ UUID=4dac65fa-8c23-4f6e-8b9d-dbc8baf50440 /boot                   xfs     defaul
     * **/etc/yum.repos.d 目录下的配置文件内容**
     * **/etc/yum.repos.d 目录下，错误的配置文件影响**
    
+3. 搭建本地yum
+
+```shell
+# 1. 挂载光盘
+1. mkdir /mydvd
+2. mount /dev/cdrom /mydvd
+3. ls /mydvd
+# 2. 改yum配置文件
+1. cd /etc/yum.repos.d
+2. mkdir /etc/yum.repos.d/bak
+3. mv /etc/yum.repos.d/*.repo /etc/4. yum.repos.d/bak
+4. vim /etc/yum.repos.d/mydvd.repo
+    [mydvd]
+    name=mydvd
+    baseurl=file:///mydvd
+    enabled=1
+    gpgcheck=0 
+    
+5. yum repolist
+# 3. 开机永久挂载
+1. vim /etc/fstab
+    ......
+    /dev/cdrom /mydvd iso9660 defaults 0 0
+    ......
+    
+2. umount /mydvd
+3. mount -a 
+4. yum repolist
+5. yum clean all
+6. yum repolist
+    
+```
 ---
